@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+exports.mustLogin=function(req,res,next){
+	if(req.session.user){
+		next()
+	}else{
+		req.flash('error','你尚未登录，请登录')
+		res.redirect('/users/login')
+	}
+}
+exports.mustNotLogin=function(req,res,next){
+	if(req.session.user){
+		req.flash('error','你已经登录')
+		res.redirect('/')
+	}else{
+		next()
+	}
+}
